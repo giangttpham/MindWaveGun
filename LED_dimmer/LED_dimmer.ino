@@ -26,12 +26,16 @@ void setup()  {
   pinMode(red2, OUTPUT);
   pinMode(green2, OUTPUT);
   pinMode(yellow2, OUTPUT);
+
 } 
 
 // the loop routine runs over and over again forever:
 void loop()  { 
   // set the brightness of pin 9:
+
   analogWrite(red1, brightness);
+  
+  
   delay(30); 
   analogWrite(green1, brightness);
   delay(30); 
@@ -49,7 +53,9 @@ void loop()  {
   // reverse the direction of the fading at the ends of the fade: 
   if (brightness == 0 || brightness == 255) {
     fadeAmount = -fadeAmount ; 
-  }     
+  }  
+
+
   // wait for 30 milliseconds to see the dimming effect    
   delay(30);                            
 }
