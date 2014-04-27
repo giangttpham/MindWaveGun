@@ -98,33 +98,25 @@ void loop() {
             poorQuality = payloadData[i];
             bigPacket = true;            
             break;
-          case 4:
+          case 4: //Code 0x04: Attention Esense
             i++;
             attention = payloadData[i];                        
             break;
-          case 5:
+          case 5: //code 0x05: Mediation Esense
             i++;
             meditation = payloadData[i];
             break;
           case 0x80:
             i = i + 3;
             break;
-          case 0x83:
-            //signal = payloadData[++i];
-            
-            /*
-            for (int j = 0; j < EEG_FREQ_BANDS; j++) 
-            {
-              eegPower[j] = ((uint32_t)payloadData[++i] << 16) | ((uint32_t)payloadData[++i] << 8) | (uint32_t)payloadData[++i];
-           
-            }*/
+          case 0x83: //code 0x83: 8 commonly regconised EEG brainwaves
             
             for (int j = 0; j< EEG_FREQ_BANDS; j++)
             {
                      eegPower[j] = ((uint32_t)signal[++i] << 16) | ((uint32_t)signal[++i] << 8) | (uint32_t)signal[++i];
             }
             
-         //i = i + 25;       
+  
             break;
           default:
             break;
@@ -141,8 +133,6 @@ void loop() {
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
           Serial.print(attention, DEC);
-
-
           Serial.print(" Time since last packet: ");
           Serial.println(millis() - lastReceivedPacket, DEC);
           lastReceivedPacket = millis();
@@ -154,12 +144,16 @@ void loop() {
             Serial.print("\t");
           }
           Serial.println();
+          
+          //pick the brainwave type with the highest signal
           int max_freq_pos = maxFrequency(eegPower);
           Serial.print("Max Frequency is ");
           Serial.print(eegPower[max_freq_pos],DEC);
           Serial.print(" with index ");
           Serial.println(max_freq_pos); 
           
+          //EEG sinal order: 0 - Delta, 1 - Theta; 2 - Low Alpha; 3 - High Alpha
+          //4 - Low Beta; 5 - High Beta; 6 - Mid Gamma; 7 - High Gamma
           switch(max_freq_pos)
           {
             case 0:
@@ -189,8 +183,10 @@ void loop() {
           }
           
           Serial.println();
-          if (attention >= 70 && attention <= 100 && max_freq_pos == 5)
+          if (attention >= 30 && max_freq_pos == 5)
             analogWrite(MOTOR,attention);
+          else
+            analogWrite(MOTOR,0);
             
           
                               
@@ -205,6 +201,8 @@ void loop() {
   } // end if read 0xAA byte
 }
 
+
+//Function to select the brainwave type with the highest signal
 int maxFrequency(uint32_t eegPower[EEG_FREQ_BANDS])
 {
   int max_freq_index = 0;
