@@ -38,7 +38,7 @@ boolean bigPacket = false;
 // Microprocessor Setup //
 //////////////////////////
 void setup() {
-
+ 
   pinMode(GREENLED1, OUTPUT);
   pinMode(GREENLED2, OUTPUT);
   pinMode(GREENLED3, OUTPUT);
@@ -54,10 +54,8 @@ void setup() {
   Serial.begin(BAUDRATE);           // USB
 
   delay(3000) ;
-  //Serial.print(194,BYTE) ;
-  Serial.print("Looking for headset\n");
-  Serial.write(194);
-  Serial.print("Done paring\n");
+  Serial.write(194) ;
+
 
 
 }
