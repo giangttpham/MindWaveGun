@@ -5,7 +5,7 @@
 // license free.
 ////////////////////////////////////////////////////////////////////////
 
-#define MOTOR 3
+//#define MOTOR 3
 #define BAUDRATE 115200
 #define DEBUGOUTPUT 0
 
@@ -28,13 +28,25 @@ byte meditation = 0;
 long lastReceivedPacket = 0;
 boolean bigPacket = false;
 
+boolean loaded = 0;
+boolean shot = 0;
+
+//motor controls
+const int relayPin = 2;	    // use this pin to drive the transistor
+const int timeDelay = 3000; // delay in ms for on and off phases
+
+// named constants for the switch and motor pins
+const int motorPin =  9; // the number of the motor pin
+
 //////////////////////////
 // Microprocessor Setup //
 //////////////////////////
 void setup() {
+  pinMode(relayPin, OUTPUT);  // set pin as an output
+   // initialize the motor pin as an output:
+  //pinMode(motorPin, OUTPUT);      
 
-
-  pinMode(MOTOR, OUTPUT);
+  //pinMode(MOTOR, OUTPUT);
   Serial.begin(BAUDRATE);           // USB
 
   delay(3000) ;
@@ -182,12 +194,25 @@ void loop() {
               break;
           }
           
+          /*
           Serial.println();
           if (attention >= 30 && max_freq_pos == 5)
             analogWrite(MOTOR,attention);
           else
-            analogWrite(MOTOR,0);
-            
+            analogWrite(MOTOR,0);*/  
+        
+          Serial.println();
+          if (attention >= 40 && ( max_freq_pos == 4 || max_freq_pos == 5))
+          {
+             digitalWrite(relayPin, HIGH);  // turn the relay on
+             delay(2000);   
+            digitalWrite(motorPin, HIGH);
+    
+          }
+           delay(2000);
+
+           digitalWrite(relayPin, LOW);  // turn the relay on
+           digitalWrite(motorPin, LOW);
           
                               
         }
