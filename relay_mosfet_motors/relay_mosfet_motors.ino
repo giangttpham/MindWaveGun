@@ -10,15 +10,13 @@ void setup() {
   // initialize the switch pin as an input:
 }
 
-void loop(){
-  // read the state of the switch value:
+void loop() {
   digitalWrite(relayPin,HIGH);
-  delay(500);
-  digitalWrite(motorPin, HIGH);  
-  delay(1000);
-    digitalWrite(motorPin, LOW); \
-    digitalWrite(relayPin,LOW);
-      delay(1000);
-
-  
+  //delay(500);
+  //digitalWrite(motorPin, HIGH);  
+  delay(3000);
+  //digitalWrite(motorPin, LOW);
+  digitalWrite(relayPin,LOW);
+  delay(3000);
 }
+

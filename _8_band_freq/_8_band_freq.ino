@@ -206,13 +206,15 @@ void loop() {
           {
              digitalWrite(relayPin, HIGH);  // turn the relay on
              delay(2000);   
-            digitalWrite(motorPin, HIGH);
-    
+            //digitalWrite(motorPin, HIGH);
+              digitalWrite(relayPin, LOW);
+             
           }
-           delay(2000);
+          delay(2000);
+           //delay(2000);
 
-           digitalWrite(relayPin, LOW);  // turn the relay on
-           digitalWrite(motorPin, LOW);
+           //digitalWrite(relayPin, LOW);  // turn the relay on
+           
           
                               
         }
