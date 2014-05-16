@@ -11,12 +11,13 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(relayPin,HIGH);
+    digitalWrite(motorPin, HIGH);  
+
+ // digitalWrite(relayPin,HIGH);
   //delay(500);
-  //digitalWrite(motorPin, HIGH);  
-  delay(3000);
-  //digitalWrite(motorPin, LOW);
-  digitalWrite(relayPin,LOW);
-  delay(3000);
+  delay(5000);
+  digitalWrite(motorPin, LOW);
+  //digitalWrite(relayPin,LOW);
+  delay(10000);
 }
 

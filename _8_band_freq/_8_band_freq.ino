@@ -11,16 +11,14 @@
 
 #define EEG_FREQ_BANDS 8
 
+//8 frequency band
 uint32_t eegPower[EEG_FREQ_BANDS];
-
-// checksum variables
 byte generatedChecksum = 0;
 byte checksum = 0; 
 int payloadLength = 0;
 byte payloadData[64] = { 0};
 byte signal[64] = {0};  
 byte poorQuality = 0;
-
 byte attention = 0;
 byte meditation = 0;
 
@@ -33,7 +31,6 @@ boolean shot = 0;
 
 //motor controls
 const int relayPin = 2;	    // use this pin to drive the transistor
-const int timeDelay = 3000; // delay in ms for on and off phases
 
 // named constants for the switch and motor pins
 const int motorPin =  9; // the number of the motor pin
@@ -51,9 +48,9 @@ void setup() {
 
   delay(3000) ;
   Serial.write(194) ;
-
-
-
+    digitalWrite(relayPin, LOW);  // turn the relay on        
+   digitalWrite(motorPin, LOW);
+ delay(3000) ;
 }
 
 ////////////////////////////////
@@ -105,7 +102,7 @@ void loop() {
 
         for(int i = 0; i < payloadLength; i++) {    // Parse the payload
           switch (payloadData[i]) {
-          case 2:
+          case 2: //Code 0x02: check poor quality
             i++;            
             poorQuality = payloadData[i];
             bigPacket = true;            
@@ -136,11 +133,8 @@ void loop() {
         } // for loop
 
 #if !DEBUGOUTPUT
-
-        // *** Add your code here ***
-
         if(bigPacket) {
-
+          //print data to the serial monitor
           Serial.print("PoorQuality: ");
           Serial.print(poorQuality, DEC);
           Serial.print(" Attention: ");
@@ -193,30 +187,18 @@ void loop() {
               Serial.println("Strongest brainwave type: Mid Gamma");
               break;
           }
-          
-          /*
-          Serial.println();
-          if (attention >= 30 && max_freq_pos == 5)
-            analogWrite(MOTOR,attention);
-          else
-            analogWrite(MOTOR,0);*/  
         
+          //if attention is over 30 and the brainwave is either low/high beta, run the motors
           Serial.println();
-          if (attention >= 40 && ( max_freq_pos == 4 || max_freq_pos == 5))
+          if (attention >= 30 && ( max_freq_pos == 4 || max_freq_pos == 5))
           {
-             digitalWrite(relayPin, HIGH);  // turn the relay on
-             delay(2000);   
-            //digitalWrite(motorPin, HIGH);
-              digitalWrite(relayPin, LOW);
-             
+            digitalWrite(relayPin, HIGH);  // turn the relay on        
+            digitalWrite(motorPin, HIGH);
+            delay(5010);              
           }
-          delay(2000);
-           //delay(2000);
-
-           //digitalWrite(relayPin, LOW);  // turn the relay on
-           
-          
-                              
+            digitalWrite(relayPin, LOW);  // turn the relay on        
+            digitalWrite(motorPin, LOW);
+            delay(4000);           
         }
 #endif        
         bigPacket = false;        
