@@ -30,10 +30,8 @@ boolean loaded = 0;
 boolean shot = 0;
 
 //motor controls
-const int relayPin = 2;	    // use this pin to drive the transistor
-
-// named constants for the switch and motor pins
-const int motorPin =  9; // the number of the motor pin
+const int relayPin = 2;	    // use this pin to drive the accel motors with relay
+const int motorPin =  9; //use this pin to drive the firing motor with MOSFET
 
 //////////////////////////
 // Microprocessor Setup //
@@ -70,8 +68,6 @@ byte ReadOneByte() {
 //MAIN LOOP//
 /////////////
 void loop() {
-
-
   // Look for sync bytes
   if(ReadOneByte() == 170) {
     if(ReadOneByte() == 170) {
@@ -91,12 +87,9 @@ void loop() {
       generatedChecksum = 255 - generatedChecksum;   //Take one's compliment of generated checksum
 
         if(checksum == generatedChecksum) {    
-
-        poorQuality = 200;
-       // signal = 0;
-        attention = 0;
-        meditation = 0;
-
+          poorQuality = 200;
+          attention = 0;
+          meditation = 0;
         for(int i = 0; i < payloadLength; i++) {    // Parse the payload
           switch (payloadData[i]) {
           case 2: //Code 0x02: check poor quality
@@ -115,14 +108,11 @@ void loop() {
           case 0x80:
             i = i + 3;
             break;
-          case 0x83: //code 0x83: 8 commonly regconised EEG brainwaves
-            
+          case 0x83: //code 0x83: 8 commonly regconised EEG brainwaves 
             for (int j = 0; j< EEG_FREQ_BANDS; j++)
             {
                      eegPower[j] = ((uint32_t)signal[++i] << 16) | ((uint32_t)signal[++i] << 8) | (uint32_t)signal[++i];
-            }
-            
-  
+            }  
             break;
           default:
             break;
